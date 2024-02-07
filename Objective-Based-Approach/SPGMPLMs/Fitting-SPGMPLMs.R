@@ -1,7 +1,7 @@
-## The ```locpol``` package is
+## The "locpol" package is required for estimating the non-parametric functions using local polynomial estimators.
 if(!require(locpol)){install.packages("locpol")}else{library(locpol)}
+## The "splines" package is required for constructing B-spline basis functions for estimating a Gaussian mixture of partial regression splines
 library(splines)
-
 
 ## A function that computes the BIC for the fitted model
 BIC=function(t,x,bw,K,LogLik){
