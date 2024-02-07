@@ -1,7 +1,8 @@
-if(!require("mixtools")){install.packages("mixtools")}else{library(mixtools)}
+## The ```locpol``` package is required for higher-order local polynomial regression estimation.
 if(!require("locpol")){install.packages("locpol")}else{library(locpol)}
+## The ```splines``` package is required for constructing B-spline basis functions
 library(splines)
-library(MASS)
+
 ###Kernel function
 Kern<-function(x,x0,h){
   z=(x-x0)/h
@@ -9,21 +10,6 @@ Kern<-function(x,x0,h){
   out=f
   if(sum(f)>0){out=f/sum(f)};
   return(out)
-}
-
-##Normalizing functions
-
-Normalize=function(x){
-  x/sum(x)
-}
-
-minmaxscaler=function(x){
-  (x-min(x))/(max(x)-min(x))
-}
-
-standardizer=function(x){
-  z=(x-mean(x))/sd(x)
-  return(z)
 }
 
 ##Conditional distribution of y|x
