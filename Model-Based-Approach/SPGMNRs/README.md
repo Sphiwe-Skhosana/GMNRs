@@ -35,6 +35,6 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```true.init.model``` is a list object that contains the true model
   + ```p``` If ```method=2``` then this parameter specifies the degree of the polynomial.    
   #### Values (output)
- The ```initialize.model``` function returns a list object ```init.model0``` with the initial fitted model.
+  The ```initialize.model``` function returns a list object ```init.model0``` with the initial fitted model.
 # References
 1. Xiang S. and Yao W. Semiparametric mixtures of nonparametric regressions. Annals of the Institute of Statistical Mathematics, 70:131–154, 2018.
