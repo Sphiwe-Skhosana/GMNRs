@@ -218,30 +218,8 @@ local.polynomial.smoother=function(x,y,xgrid,bw,d,W){
   return(g)
 }
 
-###A function to compute the roughness of a function
-Rough_curve<-function(x,f=NULL){
-  if(!is.null(f)) f=f[order(x)]
-  x=sort(x)
-  n=length(x);
-  N=diag(n)
-  ##Checking whether the x's are distinct
-  if(length(unique(x))!=n){z=unique(x);n=length(z);N=sapply(z,function(u) as.numeric(x==u));  x=z}
-  h<-NULL
-  for(i in (1:(n-1))){h=c(h,x[i+1]-x[i])}
-  Q<-matrix(0,nrow=n,ncol=n-2)
-  for(j in (2:(n-1))){Q[j-1,j-1]=1/h[j-1];Q[j,j-1]=-(1/h[j-1]+1/h[j]);Q[j+1,j-1]=1/h[j]}
-  R<-matrix(0,n-2,n-2)
-  for(i in (2:(n-1))){R[i-1,i-1]=(h[i-1]+h[i])/3;if(i<=(n-2)){R[i,i-1]=R[i-1,i]=h[i]/6}}
-  K=Q%*%solve(R)%*%t(Q)
-  Rh=NULL
-  if(!is.null(f)){
-    f=apply(N,2,function(x) mean(f[which(x==1)])); 
-    Rh=t(f)%*%K%*%f} ##Roughness value
-  return(list(Rh=Rh,K=K,N=N))
-}
-
 ###Initialization function
-initialize.model=function(x,y,k,method=NULL,true.init=NULL,p=1){
+initialize.model=function(x,y,k,method=NULL,true.init.model=NULL,p=1){
   n=length(y)
   BIC=1e6
   if(method=="1"){##Mixtures of Regression splines
@@ -377,7 +355,7 @@ GaussLinMix=function(x,y,k,init.model0){
 }
 
 ###A function to fit the SPGMNRs model using the MB-EM algorithm
-SPGMNR_MB_EM=function(x,y,k,bw,d,xgrid,init.model,lmd_0=NULL){
+SPGMNRs_MB_EM=function(x,y,k,bw,d,xgrid,init.model,lmd_0=NULL){
   n=length(y)
   ngrid=length(xgrid)
   ##Initial state
