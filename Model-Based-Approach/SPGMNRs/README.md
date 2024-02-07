@@ -26,7 +26,7 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```df``` is the total degrees of freedom for the fitted CRFs
   + ```BIC``` is the value of the fitted Bayesian information criterion
   + ```LL``` is the fitted log-likelihood
-* The ```initialize.model(x,y,k,method=1,true.init.model=NULL,p=1)``` function fits/computes a mixture of regressions model using one of three methods specified by the argument ```method```. The fitted model is used to initialize the any of the above functions used to fit the SPGMNRs.
+* The ```initialize.model(x,y,k,method=1,true.init.model=NULL,p=1)``` function fits/computes a mixture of regressions model using one of three methods specified by the argument ```method```. The fitted model is used to initialize any of the above functions used to fit the SPGMNRs model.
     #### Arguments (inputs)
   + ```x``` is a vector of length $n$ that consists of the covariate values. Note that the function can only take only one covariate.
   + ```y``` is a vector of length $n$ that consists of the response variable values
