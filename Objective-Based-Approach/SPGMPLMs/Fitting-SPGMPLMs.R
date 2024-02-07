@@ -1,12 +1,7 @@
-if(!require(mixtools)){install.packages("mixtools")}else{library(mixtools)}
-if(!require(Hmisc)){install.packages("Hmisc")}else{library(Hmisc)}
-if(!require(mclust)){install.packages("mclust")}else{library(mclust)}
+## The ```locpol``` package is
+if(!require(locpol)){install.packages("locpol")}else{library(locpol)}
+library(splines)
 
-##Conditional distribution of y|x
-cond_dist=function(x,y,mix.mu,mix.prop,mix.sigma2,mix.beta){
-  k=length(mix.sigma2)
-  rowSums(sapply(1:k,function(j) mix.prop[,j]*dnorm(y-mix.mu[,j]-x%*%mix.beta,0,sqrt(mix.sigma2[j]))))
-}
 
 ## A function that computes the BIC for the fitted model
 BIC=function(t,x,bw,K,LogLik){
@@ -47,7 +42,6 @@ GMM=function(y,mix.mu,mix.prop,mix.sigma){
 
 ##Local polynomial smoother
 local.polynomial.smoother=function(x,y,xgrid,bw,d,W){
-  library(locpol)
   n=length(y)
   g=locPolSmootherC(x,y,xgrid,bw,d,gaussK,weig=W)
   return(g)
