@@ -15,7 +15,7 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```bw``` is the bandwidth 
   + ```xgrid``` is a vector of length $N$ that consists of a set of local grid points
   + ```init.model``` is a list object that contains the model to initialize the algorithm. See the description of the ```initialize.model``` function below.
-  + ```lmd``` specifies the threshold parameter value. The default is $1e-5$.
+  + ```lmd``` specifies the threshold parameter value. The default is ```lmd=1e-5```.
     
   #### Values (outputs)
   All of the above functions return a list with the following items:
