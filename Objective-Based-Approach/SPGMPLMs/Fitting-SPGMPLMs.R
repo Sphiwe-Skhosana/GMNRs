@@ -8,7 +8,7 @@ cond_dist=function(x,y,mix.mu,mix.prop,mix.sigma2,mix.beta){
   rowSums(sapply(1:k,function(j) mix.prop[,j]*dnorm(y-mix.mu[,j]-x%*%mix.beta,0,sqrt(mix.sigma2[j]))))
 }
 
-##
+## A function that computes the BIC for the fitted model
 BIC=function(t,x,bw,K,LogLik){
   n=length(t)
   p=ncol(x)
@@ -28,6 +28,7 @@ trim=function(x){
   return(abs(y1-y2))
 }
 
+## The kernel function
 Kern<-function(x,x0,h){
   z=(x-x0)/h
   f=ifelse(abs(z)<=1, 0.75*(1 - z^2),0)/h
@@ -37,6 +38,7 @@ Kern<-function(x,x0,h){
   return(out)
 }
 
+## A function that computes the density of a Gaussian mixture model (GMM)
 GMM=function(y,mix.mu,mix.prop,mix.sigma){
   k=length(mix.mu)
   out=rowSums(sapply(1:k,function(j) mix.prop[j]*dnorm(y-mix.mu[j],0,mix.sigma[j])))
@@ -124,7 +126,7 @@ backfit=function(y,t,x,tgrid,k,mh,Beta_init,pi_init,sigma2_init,bw,backfit=TRUE)
   out=list(mu=mu,pi1=pi1,sigma21=sigma21,Beta1=Beta1)
 }
 
-##Backfitting function
+##A function that performs iterative backfitting
 backfit_fullyIter=function(y,t,x,tgrid,k,mh,Beta_init,pi_init,sigma2_init,bw){
   n=length(y)
   z=as.matrix(x)
@@ -207,24 +209,14 @@ backfit_fullyIter=function(y,t,x,tgrid,k,mh,Beta_init,pi_init,sigma2_init,bw){
   out=list(mu=mu,pi1=pi1,sigma21=sigma21,Beta1=Beta1)
 }
 
-##Performance function
-RASE=function(est,true){
-  n=length(est)
-  #small then large
-  if(which.max(apply(est,2,max))==1) est=est[,2:1]
-  rase=sqrt(sum((est-true)^2)/n)
-  return(rase)
-}
-
-###Initialization function
+##A function used to initialize the algorithms that fit the SPGMPLMs
 initialize.model=function(x,t,y,k,method=NULL,true.init=NULL,p){
   n=length(y)
   BIC=1e10
-  if(method==1){##Mixture of Regression splines
+  if(method==1){##Mixture of partial regression splines
     for(j in 1:1e2){
       m=list(BIC=1e6)
       try({m=mix.partial.reg.splines(x,t,y,k)},silent=T)
-      #print(m$BIC)
       if(m$BIC<BIC){init.model=m$init.model0;BIC=m$BIC}
     }
   }
@@ -242,7 +234,7 @@ initialize.model=function(x,t,y,k,method=NULL,true.init=NULL,p){
   return(list(init.model0=init.model))
 }
 
-###Computing the roughness of a curve
+##A function that computes the roughness of a curve
 Rough_curve<-function(x,f=NULL){
   if(!is.null(f)) f=f[order(x)]
   x=sort(x)
@@ -264,7 +256,7 @@ Rough_curve<-function(x,f=NULL){
   return(list(Rh=Rh,K=K,N=N))
 }
 
-###Mixture of partial regression splines 
+###A function that fits the mixture of partial regression splines (to initialize) 
 mix.partial.reg.splines=function(X,t,y,k){
   library(splines)
   X=as.matrix(X)
@@ -316,6 +308,7 @@ mix.partial.reg.splines=function(X,t,y,k){
   return(list(r=r,BIC=BIC,lmd0=lmd1,mu=mu1,Beta=Beta1,pi=pi1,sigma2=sigma21,init.model0=model0,df_reg=df_reg))
 }
 
+## A function that fits a Gaussian mixture of linear regressions (GMLRs) model
 GaussLinMix=function(x,y,x0,k,weights=NULL,model0){
   n=length(y)
   x=as.matrix(x)
@@ -355,8 +348,8 @@ GaussLinMix=function(x,y,x0,k,weights=NULL,model0){
   return(list(resp=gn,mix.mu=mu1,mix.Beta=Beta1,mix.sigma2=sigma21,mix.prop=pi1,LL=LL1))
 }
 
-##Semi-parametric mixtures of partially linear models (PL-EM)
-Kernel_Mix_PL_EM=function(x,t,y,k,bw,tgrid,init.model){
+##A function that fits the SPGMPLMs using the profile-likelihood EM (PL-EM) algorithm
+SPGMPLMs_PL_EM=function(x,t,y,k,bw,tgrid,init.model){
   n=length(y)
   z=as.matrix(x)
   ngrid=length(tgrid)
@@ -406,8 +399,8 @@ Kernel_Mix_PL_EM=function(x,t,y,k,bw,tgrid,init.model){
   return(out)
 }
 
-##Roughness Approach
-Kernel_Mix_Rough=function(x,t,y,k,bw,tgrid,init.model){
+##A function that fits the SPGMPLMs using the proposed objective-based profile-likelihood EM (OB-PL-EM) algorithm
+SPGMPLMs_OB_PL_EM=function(x,t,y,k,bw,tgrid,init.model){
   n=length(y)
   z=as.matrix(x);p=ncol(z)
   u=t
@@ -481,7 +474,8 @@ Kernel_Mix_Rough=function(x,t,y,k,bw,tgrid,init.model){
   return(out)
 }
 
-Kernel_Mix_PL_EM.Naive=function(X,t,y,k,bw,tgrid,init.model=NULL){
+## A function that fits the SPGMPLMs using the Naive EM algorithm
+SPGMPLMs_Naive_EM=function(X,t,y,k,bw,tgrid,init.model=NULL){
   X=as.matrix(X)
   u=t
   p=ncol(X);n=nrow(X)
