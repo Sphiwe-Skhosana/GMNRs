@@ -13,7 +13,7 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```y``` is a vector of length $n$ that consists of the response variable values
   + ```k``` is the number of components
   + ```bw``` is the bandwidth 
-  + ```xgrid``` is a vector of length $N$ that consists of a set of local grid points
+  + ```xgrid``` is a vector of length $N\leq n$ that consists of a set of local grid points
   + ```init.model``` is a list object that contains the model to initialize the algorithm. It is obtained as the output of the ```initialize.model``` function. See the description of the ```initialize.model``` function below.
   + ```lmd``` specifies the threshold parameter value. The default is ```lmd=1e-5```.
     
