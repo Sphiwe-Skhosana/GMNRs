@@ -1,28 +1,6 @@
-##Local polynomial smoother
-local.polynomial.smoother=function(x,y,xgrid,bw,d,W){
-  library(locpol)
-  n=length(y)
-  g=locPolSmootherC(x,y,xgrid,bw,d,EpaK,weig=W)
-  return(g)
-}
-
-ColStat=function(x){
-  apply(x,2,function(x) c(mean(x),sd(x)))
-}
-
-mse=function(est.model,true.model){
-  library(combinat)
-  mix.prop=est.model$mix.prop;true.prop=true.model$prop
-  mix.beta=est.model$mix.beta;true.beta=true.model$beta
-  mix.sigma2=est.model$mix.sigma2;true.sigma2=true.model$sigma2
-  mix.mu=est.model$mix.mu;true.mu=true.model$mu
-  n=nrow(mix.mu);K=ncol(mix.mu)
-  RASE=sqrt(colSums((mix.mu-true.mu)^2)/n)
-  MSE_beta=(mix.beta-true.beta)^2;
-  MSE_sigma2=(mix.sigma2-true.sigma2)^2
-  MSE_prop=(mix.prop-true.prop)^2
-  return(c(MSE_prop,colMeans(MSE_beta),MSE_sigma2,RASE))
-}
+if(!require(mixtools)){install.packages("mixtools")}else{library(mixtools)}
+if(!require(Hmisc)){install.packages("Hmisc")}else{library(Hmisc)}
+if(!require(mclust)){install.packages("mclust")}else{library(mclust)}
 
 ##Conditional distribution of y|x
 cond_dist=function(x,y,mix.mu,mix.prop,mix.sigma2,mix.beta){
@@ -41,32 +19,6 @@ BIC=function(t,x,bw,K,LogLik){
   return(BIC)
 }
 
-perf=function(est,true){
-  n=length(est)
-  rase=sqrt(sum((est-true)^2)/n)
-  ks=max(abs(est-true))
-  return(c(rase,ks))
-}
-
-Rsquared=function(y,mh,gn){
-  K=ncol(gn);n=length(y)
-  ybar_k=colSums(y*gn)/colSums(gn)
-  EWSS=sum(sapply(1:K,function(j) sum(gn[,j]*(mh[,j]-ybar_k[j])^2)))
-  RWSS0=sapply(1:K,function(j) sum(gn[,j]*(y-mh[,j])^2))
-  RWSS=sum(RWSS0)
-  WSS=EWSS+RWSS
-  RMSE=sqrt(sum(sapply(1:K,function(j){nk=sum(gn[,j]);RWSS0[j]/nk})))
-  return(list(RMSE=RMSE,R2=round(EWSS/WSS,2)*100))
-}
-
-Dist=function(x){
-  k=ncol(x)
-  f=apply(x,2,sum)
-  idx=order(f,decreasing = T)
-  y=x[,idx]
-  res=apply(y,1,which.max)
-  return(list(switch=any(res!=1),id=idx))
-}
 
 ##Finding the trimmed (or inter-percentile) range
 trim=function(x){
@@ -84,36 +36,6 @@ Kern<-function(x,x0,h){
   if(sum(f)>0){out=f/sum(f)};
   return(out)
 }
-
-##Normalizing functions
-Normalize=function(x){
-  x/sum(x)
-}
-
-minmaxscaler=function(x){
-  (x-min(x))/(max(x)-min(x))
-}
-
-standardizer=function(x){
-  z=(x-mean(x))/sd(x)
-  return(z)
-}
-
-###Kernel polynomial smoother matrix
-polynomial.smoother.matrix=function(x,x.grid,d,W){
-  n=length(x)
-  S=sapply(1:length(x.grid),function(i){
-    w=diag(W[,i]);
-    X=t(t(matrix((x-x.grid[i]),n,d+1))^(0:d))
-    (solve(t(X)%*%w%*%X)%*%t(X)%*%w)[1,]
-  })
-  return(S)
-}
-
-##Backfitting: CRF only
-if(!require(mixtools)){install.packages("mixtools")}else{library(mixtools)}
-if(!require(Hmisc)){install.packages("Hmisc")}else{library(Hmisc)}
-if(!require(mclust)){install.packages("mclust")}else{library(mclust)}
 
 GMM=function(y,mix.mu,mix.prop,mix.sigma){
   k=length(mix.mu)
