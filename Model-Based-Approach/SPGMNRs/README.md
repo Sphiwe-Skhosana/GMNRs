@@ -3,8 +3,8 @@ This folder contains all the ```R``` code used to fit semi-parametric mixtures o
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMNRs.R):
-* The ```SPGMNRs_MB_ECM(x,y,k,bw,xgrid,init.model,lmd)``` function fits the SPGMNRs model using the model-based ECM approach.
-* The ```SPGMNRs_MB_EM (x,y,k,bw,xgrid,init.model,lmd)``` function fits the SPGMNRs model using the model-based EM approach.
+* The ```SPGMNRs_MB_ECM(x,y,k,bw,xgrid,init.model,lmd=1e-5)``` function fits the SPGMNRs model using the model-based ECM approach.
+* The ```SPGMNRs_MB_EM (x,y,k,bw,xgrid,init.model,lmd=1e-5)``` function fits the SPGMNRs model using the model-based EM approach.
 * The ```SPGMNRs_Naive_EM (x,y,k,bw,xgrid,init.model)``` function fits the SPGMNRs model using the naive EM algorithm without consideration to the label-switching problem.
 * The ```SPGMNRs_LEM (x,y,k,bw,xgrid,init.model)``` function fits the SPGMNRs model using the local EM algorithm of Xiang and Yao (2018). The LEM algorithm makes use of the effective EM algorithm to account for the label-switching problem.
 
@@ -15,7 +15,7 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```bw``` is the bandwidth 
   + ```xgrid``` is a vector of length $N$ that consists of a set of local grid points
   + ```init.model``` is a list object that contains the model to initialize the algorithm. See the description of the ```initialize.model``` function below.
-  + ```lmd``` is the threshold parameter value
+  + ```lmd``` specifies the threshold parameter value. The default is $1e-5$.
     
   #### Values (outputs)
   All of the above functions return a list with the following items:
