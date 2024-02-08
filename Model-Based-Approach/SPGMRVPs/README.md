@@ -38,6 +38,6 @@ In this section, we provide a brief description of the code (contained in the ``
   #### Values (output)
   The ```initialize.model``` function returns a list object ```init.model0``` with the initial fitted model.
 # References
-1. Huang M., Yao W. Mixture of regression models with varying mixing proportions: a semiparametric approach. Journal of the American Statistical Association, 107(498):711-24, 2012
-2. Benaglia, T., Chauveau, D., Hunter, D. R., & Young, D. S. mixtools: an R package for analyzing mixture models. Journal of Statistical Software, 32:1-29, 2010.
+1. Benaglia, T., Chauveau, D., Hunter, D. R., & Young, D. S. mixtools: an R package for analyzing mixture models. Journal of Statistical Software, 32:1-29, 2010.
+2. Huang M., Yao W. Mixture of regression models with varying mixing proportions: a semiparametric approach. Journal of the American Statistical Association, 107(498):711-24, 2012 
 3. Jacobs R. A., Jordan M. I., Nowlan S. J., Hinton G. E. Adaptive mixtures of local experts. Neural Computation, 3(1):79-87, 1991
