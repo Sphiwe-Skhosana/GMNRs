@@ -184,10 +184,18 @@ backfit_fullyIter=function(y,t,x,tgrid,k,Beta_init,pi_init,sigma2_init,bw,backfi
 }
 
 ##A function to initialize the fitting algorithm in the function SPGMRVPs_MB_ECM
-initialize.model=function(x,y,k,method=NULL,true.init=NULL,p=1){
+initialize.model=function(x,t,y,k,method=NULL,true.init=NULL,p=1){
   n=length(y)
   BIC=1e6
-  if(method=="1"){##Mixtures of polynomial regressions
+  if(method=="1"){##Mixtures-of-Experts
+    for(j in 1:1e2){
+      m=list(BIC=1e6)
+      try({m=HME(y,x,t,k=2)})
+      init.model=list(mu0=m$mix.mu,sigma20=m$mix.sigma2,pi0=m$mix.prop,Beta0=m$mix.beta)
+      if(m$BIC<BIC){init.model=init.model;BIC=m$BIC}
+    }
+  }
+  if(method=="2"){##Mixtures of polynomial regressions
     for(j in 1:1e2){
       m=list(BIC=1e6)
       try({m=mix.poly(x,y,k,p)})
@@ -218,12 +226,10 @@ mix.poly=function(x,y,k,p){
   return(list(init.model0=model0,BIC=BIC))
 }
 
-## A modified function to fit the Mixture-of-Experts using 'flexmix' package
-HME=function(y,x,t,k,init.model0){
+## A modified function to fit the Mixture-of-Experts using the hmeEM function from 'mixtools' package
+HME=function(y,x,t,k){
   n=length(y)
-  Beta0=init.model0$Beta0;pi0=init.model0$pi0;sigma20=init.model0$sigma20;w=init.model0$w
-  if(is.null(init.model0$w)) w=NULL
-  model=hmeEM(y,x,k=k,beta=Beta0,sigma=sqrt(sigma20),w=w);
+  model=hmeEM(y,x,k=k);
   w=as.matrix(model$w)
   z=cbind(rep(1,n),x)
   mix.prop=1/(1+exp(-z%*%w));mix.prop=cbind(mix.prop,1-mix.prop)
@@ -236,7 +242,7 @@ HME=function(y,x,t,k,init.model0){
   LL=sum(log(rowSums(sapply(1:k,function(j) mix.prop[,j]*dnorm(y-z%*%mix.beta[,j],0,sqrt(mix.sigma2)[j])))))
   df=(k+ncol(z)*k)+(k-1)*nrow(w)
   BIC=-2*LL+log(n)*df
-  return(list(resp=gn,LL=LL,mix.prop=mix.prop,mix.mu=mu,mix.beta=mix.beta,mix.sigma2=mix.sigma2,w=w,BIC=BIC))
+  return(list(resp=gn,mix.prop=mix.prop,mix.mu=mu,mix.beta=mix.beta,mix.sigma2=mix.sigma2,LL=LL,BIC=BIC))
 }
 
 ## A function to compute the conditional distribution for a GMLRs model
