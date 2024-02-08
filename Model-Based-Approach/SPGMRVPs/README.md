@@ -1,5 +1,5 @@
 # Introduction
-This folder contains all the ```R``` code used to fit semi-parametric mixtures of regressions with varying mixing proportions (SPGMRVPs) uisng the proposed model-based approach, the Mixtures-of-Experts (Jacobs et. al., 1991) via the parametric EM algorithm using the ```mixtools``` package (Benanglia et. al., 2010) and the naive EM algorithm.
+This folder contains all the ```R``` code used to fit semi-parametric mixtures of regressions with varying mixing proportions (SPGMRVPs) (Huang and Yao, 2012) uisng the proposed model-based approach, the Mixtures-of-Experts (Jacobs et. al., 1991) via the parametric EM algorithm using the ```mixtools``` package (Benanglia et. al., 2010) and the naive EM algorithm.
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMNRs.R):
@@ -38,6 +38,6 @@ In this section, we provide a brief description of the code (contained in the ``
   #### Values (output)
   The ```initialize.model``` function returns a list object ```init.model0``` with the initial fitted model.
 # References
-1. Xiang S. and Yao W. Semiparametric mixtures of nonparametric regressions. Annals of the Institute of Statistical Mathematics, 70:131–154, 2018.
-2. Benaglia, T., Chauveau, D., Hunter, D. R., & Young, D. S. mixtools: an R package for analyzing mixture models. Journal of statistical software, 32:1-29, 2010.
-3. Jacobs R. A., Jordan M. I., Nowlan S. J., Hinton G. E. Adaptive mixtures of local experts. Neural computation, 3(1):79-87, 1991
+1. Huang M., Yao W. Mixture of regression models with varying mixing proportions: a semiparametric approach. Journal of the American Statistical Association, 107(498):711-24, 2012
+2. Benaglia, T., Chauveau, D., Hunter, D. R., & Young, D. S. mixtools: an R package for analyzing mixture models. Journal of Statistical Software, 32:1-29, 2010.
+3. Jacobs R. A., Jordan M. I., Nowlan S. J., Hinton G. E. Adaptive mixtures of local experts. Neural Computation, 3(1):79-87, 1991
