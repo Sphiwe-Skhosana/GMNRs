@@ -1,5 +1,5 @@
 # Introduction
-This folder contains all the ```R``` code used to fit semi-parametric mixtures of non-parametric regressions (SPGMNRs) uisng the proposed model-based approach, the local EM approach proposed by Xiang and Yao (2018) and the naive EM algorithm.
+This folder contains all the ```R``` code used to fit semi-parametric Gaussian mixtures of non-parametric regressions (SPGMNRs) uisng the proposed model-based approach, the local EM approach proposed by Xiang and Yao (2018) and the naive EM algorithm.
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMNRs.R):
