@@ -328,3 +328,107 @@ NPGMNRs_OB_EM=function(x,y,k,bw,xgrid,init.model){
   out=list(resp=gn,mix.prop=pi1,mix.mu=mu1,mix.sigma2=sigma21,LL=LL1)
   return(out)
 }
+
+##NaiveEM algorithm
+NPGMNRs_Naive_EM=function(x,y,k,bw,xgrid,init.model){
+  n=length(y)
+  ngrid=length(xgrid)
+  ##Initial state
+  pi0=init.model0$pi0
+  mu0=init.model$mu0;
+  sigma20=init.model$sigma20;
+  ##
+  LogLik0=sum(log(rowSums(sapply(1:k,function(j) pi0[,j]*dnorm(y-mu0[,j],0,sqrt(sigma20)[,j])))))
+  mu0=sapply(1:k,function(j) approx(x,mu0[,j],xgrid,rule=2)$y)
+  pi0=sapply(1:k,function(j) approx(x,pi0[,j],xgrid,rule=2)$y)
+  sigma20=sapply(1:k,function(j) approx(x,sigma20[,j],xgrid,rule=2)$y)
+  Kh=sapply(x,function(x0) Kern(x,x0,bw))
+  diff=1e6
+  count=0
+  tol=NULL
+  while(diff>1e-10){
+    ##local E-step
+    g=lapply(1:ngrid,function(i){g=sapply(1:k,function(j) pi0[i,j]*dnorm(y-mu0[i,j],0,sqrt(sigma20[i,j])));gn=g/rowSums(g)})
+    ##local M-step
+    mu1=t(sapply(1:ngrid,function(t){
+      sapply(1:k,function(j){
+        w=g[[t]][,j]*Kh[t,]
+        sum(w*y)/sum(w)
+      })
+    }))
+    mu=sapply(1:k,function(j) approx(xgrid,mu1[,j],x,rule=2)$y)
+    pi1=t(sapply(1:ngrid,function(t){
+      sapply(1:k,function(j){
+        w=g[[t]][,j]*Kh[t,]
+        prop=sum(w)/sum(Kh[t,])
+      })
+    }))
+    prop=sapply(1:k,function(j) approx(xgrid,pi1[,j],x,rule=2)$y)
+    sigma21=t(sapply(1:ngrid,function(t){
+      sapply(1:k,function(j){
+        w=g[[t]][,j]*Kh[t,]
+        sig2=sum(w*(y-mu)^2)/sum(w)
+      })
+    }))
+    sigma2=sapply(1:k,function(j) approx(xgrid,sigma21[,j],x,rule=2)$y)
+    ##Evaluating convergence
+    LogLik1=sum(log(rowSums(sapply(1:k,function(j) prop[,j]*dnorm(y-mu[,j],0,sqrt(sigma2)[,j])))))
+    diff=abs(LogLik0-LogLik1)
+    LogLik0=LogLik1
+    mu0=mu1
+    pi0=pi1
+    sigma20=sigma21
+    count=count+1
+    tol=c(tol,LogLik1)
+    if(count==1e2) diff=1e-100
+  }
+  mu1=mu
+  g=sapply(1:k,function(j) pi1[j]*dnorm(y-mu1[,j],0,sqrt(sigma21)[j]));gn=g/rowSums(g)
+  LL1=sum(log(rowSums(g)))
+  out=list(resp=gn,mix.prop=pi1,mix.mu=mu1,mix.sigma2=sigma21,LL=LL1)
+  return(out)
+}
+           
+NPGMNRs_Effective_EM=function(x,y,k,bw,xgrid,init.model){
+  n=length(y)
+  ngrid=length(xgrid)
+  ##Initial state
+  pi0=init.model$pi0
+  mu0=init.model$mu0;
+  sigma20=init.model$sigma20
+  ##
+  LogLik0=sum(log(rowSums(sapply(1:k,function(j) pi0[,j]*dnorm(y-mu0[,j],0,sqrt(sigma20)[,j])))))
+  Kh=sapply(xgrid,function(x0) Kern(x,x0,bw))
+  diff=1e6
+  count=0
+  llk=NULL
+  while(diff>1e-10){
+    ##E-step
+    g=sapply(1:k,function(j) pi0[,j]*dnorm(y-mu0[,j],0,sqrt(sigma20)[,j])+1e-100);gn=g/rowSums(g)
+    ##M-step
+    mu1=pi1=sigma21=NULL
+    for(j in 1:k){
+      W=gn[,j]*Kh
+      pi1=cbind(pi1,colSums(W)/colSums(Kh))
+      mh=colSums(W*y)/colSums(W)
+      mu1=cbind(mu1,approx(xgrid,mh,x,rule=2)$y)
+      sigma21=cbind(sigma21,colSums(W*(y-mu1[,j])^2)/colSums(W))
+    }
+    pi1=sapply(1:k,function(j) approx(xgrid,pi1[,j],x,rule=2)$y)
+    sigma21=sapply(1:k,function(j) approx(xgrid,sigma21[,j],x,rule=2)$y)
+    ##Evaluating convergence
+    LogLik1=sum(log(rowSums(sapply(1:k,function(j) pi1[,j]*dnorm(y-mu1[,j],0,sqrt(sigma21)[,j])))))
+    diff=abs(LogLik0-LogLik1)
+    LogLik0=LogLik1
+    mu0=mu1
+    pi0=pi1
+    sigma20=sigma21
+    count=count+1
+    llk=c(llk,LogLik0)
+    if(count==1e2) diff=1e-100
+  }
+  g=sapply(1:k,function(j) pi1[,j]*dnorm(y-mu1[,j],0,sqrt(sigma21[,j])));gn=g/rowSums(g)
+  LL1=sum(log(rowSums(g)))
+  out=list(resp=gn,mix.prop=pi1,mix.mu=mu1,mix.sigma2=sigma21,LL=LL1)
+  return(out)
+}
