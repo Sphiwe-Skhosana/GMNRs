@@ -144,21 +144,14 @@ Rough_curve<-function(x,f=NULL){
 initialize.model=function(x,y,k,method=NULL,true.init=NULL,p=1){
   n=length(y)
   BIC=1e6
-  if(method=="1"){##Mixtures of Regression splines
-    for(j in 1:1e3){
-      m=list(BIC=1e6)
-      try({m=mix.reg.splines(x,y,k)},silent=T)
-      if(m$BIC<BIC){init.model=m$init.model0;BIC=m$BIC}
-    }
-  }
-  if(method=="2"){##Mixtures of polynomial regressions
+  if(method=="1"){##Mixtures of polynomial regressions
     for(j in 1:1e3){
       m=list(BIC=1e6)
       try({m=mix.poly(x,y,k,p)})
       if(m$BIC<BIC){init.model=m$init.model;BIC=m$BIC}
     }
   }
-  if(method=="3"){##True values
+  if(method=="2"){##True values
     m0=true.init
     init.model=list(mu0=m0$mu,sigma20=m0$sigma2,pi0=m0$rho)
   }
