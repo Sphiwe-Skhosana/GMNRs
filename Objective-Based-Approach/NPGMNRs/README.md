@@ -4,7 +4,7 @@ This folder contains all the ```R``` code used to fit non-parametric Gaussian mi
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-NPGMNRs.R):
-* The ```NPGMNRs_OB_EM(x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the model-based ECM approach.
+* The ```NPGMNRs_OB_EM(x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the model-based EM approach.
 * The ```NPGMNRs_Naive_EM (x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the naive EM algorithm without consideration to the label-switching problem.
 * The ```NPGMNRs_Effective_EM (x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the effective EM algorithm of Huang et al. (2013).
 
