@@ -34,4 +34,4 @@ In this section, we provide a brief description of the code (contained in the ``
   #### Values (output)
   The ```initialize.model``` function returns a list object ```init.model0``` with the initial fitted model.
 # References
-1. 
+1. M. Huang, R. Li, and S. Wang. Nonparametric mixture of regression models. Journal of the American Statistical Association, 108(503):929–941, 2013.
