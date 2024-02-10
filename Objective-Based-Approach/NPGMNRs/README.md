@@ -23,14 +23,14 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```mix.mu``` is the fitted component regression functions (CRFs)
   + ```mix.sigma2``` is the fitted component variance functions
   + ```LL``` is the fitted log-likelihood
-* The ```initialize.model(x,y,k,method=1,true.init.model=NULL,p=1)``` function fits/computes a mixture of regressions model using one of three methods specified by the argument ```method```. The fitted model is used to initialize any of the above functions used to fit the NPGMNRs model.
+* The ```initialize.model(x,y,k,method=1,true.init.model=NULL,p=1)``` function fits/computes a mixture of regressions model using one of two methods specified by the argument ```method```. The fitted model is used to initialize any of the above functions used to fit the NPGMNRs model.
     #### Arguments (inputs)
   + ```x``` is a vector of length $n$ that consists of the covariate values. Note that the function can only take only one covariate.
   + ```y``` is a vector of length $n$ that consists of the response variable values
   + ```k``` is an integer that specifies the number of components
-  + ```method``` is an integer that specifies the initialization method that should be used. The choices are ```1- mixture of regression splines```, ```2 - mixture of polynomial regressions``` and ```3 - the true NPGMNRs model (if known)```
+  + ```method``` is an integer that specifies the initialization method that should be used. The choices are ```1 - mixture of polynomial regressions``` and ```2 - the true NPGMNRs model (if known)```
   + ```true.init.model``` is a list object that contains the true model
-  + ```p``` If ```method=2``` then this parameter specifies the degree of the polynomial.    
+  + ```p``` If ```method=1``` then this parameter specifies the degree of the polynomial.    
   #### Values (output)
   The ```initialize.model``` function returns a list object ```init.model0``` with the initial fitted model.
 # References
