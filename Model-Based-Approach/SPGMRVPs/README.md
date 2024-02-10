@@ -1,5 +1,5 @@
 # Introduction
-This folder contains all the ```R``` code used to fit semi-parametric mixtures of regressions with varying mixing proportions (SPGMRVPs) (Huang and Yao, 2012) uisng the proposed model-based approach, the Mixtures-of-Experts (Jacobs et. al., 1991) via the parametric EM algorithm using the ```mixtools``` package (Benanglia et. al., 2010) and the naive EM algorithm.
+This folder contains all the ```R``` code used to fit semi-parametric Gaussian mixtures of regressions with varying mixing proportions (SPGMRVPs) (Huang and Yao, 2012) uisng the proposed model-based approach, the Mixtures-of-Experts (Jacobs et. al., 1991) via the parametric EM algorithm using the ```mixtools``` package (Benanglia et. al., 2010) and the naive EM algorithm.
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMNRs.R):
