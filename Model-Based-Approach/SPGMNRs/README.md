@@ -4,7 +4,7 @@ This folder contains all the ```R``` code used to fit semi-parametric Gaussian m
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMNRs.R):
 * The ```SPGMNRs_MB_ECM(x,y,k,bw,xgrid,init.model,lmd=1e-5)``` function fits the SPGMNRs model using the model-based ECM approach.
-* The ```SPGMNRs_MB_EM (x,y,k,bw,xgrid,init.model,lmd=1e-5)``` function fits the SPGMNRs model using the model-based EM approach.
+* The ```SPGMNRs_MB_EM (x,y,k,bw,xgrid,init.model)``` function fits the SPGMNRs model using the model-based EM approach.
 * The ```SPGMNRs_Naive_EM (x,y,k,bw,xgrid,init.model)``` function fits the SPGMNRs model using the naive EM algorithm without consideration to the label-switching problem.
 * The ```SPGMNRs_LEM (x,y,k,bw,xgrid,init.model)``` function fits the SPGMNRs model using the local EM algorithm of Xiang and Yao (2018). The LEM algorithm makes use of the effective EM algorithm to account for the label-switching problem.
 
