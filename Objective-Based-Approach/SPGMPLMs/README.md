@@ -4,7 +4,7 @@ This folder contains all the ```R``` code used to fit semi-parametric Gaussian m
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMPLMs.R):
-* The ```SPGMPLMs_OB_PL_EM(X,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the objective-based approach.
+* The ```SPGMPLMs_OB_EM(X,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the objective-based approach.
 * The ```SPGMPLMs_Naive_EM (x,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the naive EM algorithm without consideration to the label-switching problem.
 * The ```SPGMPLMs_PL_EM(x,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the PL_EM algorithm of Wu and Liu (2017).
 
