@@ -365,6 +365,109 @@ SPGMRVPs_MB_ECM=function(x,t,y,k,bw,tgrid,init.model,lmd_0=1e-5){
   return(out)
 }
 
+##A function to fit the SPGMRVPs using the model-based approach via the EM algorithm
+SPGMRVPs_MB_EM=function(x,t,y,k,bw,tgrid,init.model){
+  n=length(y)
+  x=as.matrix(x)
+  z=cbind(rep(1,n),x)
+  p=ncol(z)
+  u=t
+  ngrid=length(tgrid)
+  ##Initial State
+  lmd0=rep(1/ngrid,ngrid)
+  pi0=init.model$pi0
+  Beta0=init.model$Beta0;
+  sigma20=init.model$sigma20
+  ##
+  LogLik0=sum(log(rowSums(sapply(1:k,function(j) pi0[,j]*dnorm(y-z%*%Beta0[,j],0,sqrt(sigma20)[j])))))
+  mix.Beta0=lapply(1:k,function(j) matrix(Beta0[,j],n,p,byrow=T))
+  Beta0=lapply(1:k,function(j) matrix(Beta0[,j],ngrid,p,byrow=T))
+  pi0=sapply(1:k, function(j) approx(u,pi0[,j],tgrid,rule=2)$y)
+  sigma20=matrix(sigma20,ngrid,k,byrow = T)
+  Kh=sapply(tgrid,function(u0) Kern(u,u0,bw))
+  Kh0=Kh
+  diff=1e6
+  count=0
+  llk=NULL
+  tol=NULL
+  while(diff>1e-10){
+    ##E-Step
+    v=sapply(1:ngrid,function(t){
+      beta0=sapply(1:k,function(j) Beta0[[j]][t,])
+      lmd0[t]*GMLR(y,z,beta0,pi0[t,],sqrt(sigma20)[t,])+1e-300});vh=v/rowSums(v)
+    zh=lapply(1:length(grid),function(t){
+      beta0=sapply(1:k,function(j) Beta0[[j]][t,])
+      g=sapply(1:k,function(j) pi0[t,j]*dnorm(y-z%*%beta0[,j],0,sqrt(sigma20[t,j])))+1e-300
+      ;gh=g/rowSums(g)})
+                   
+    ##M-Step
+    lmd1=colSums(vh)/n
+    ### Beta
+    Beta=lapply(1:k,function(j){
+        #Next-level (a list with size=k within each top-level list)
+        b=t(sapply(1:ngrid,function(t){
+          W=diag(lmd1[t]*zh[[t]][,j]*Kh[,t])
+          solve(t(z)%*%W%*%z)%*%t(z)%*%W%*%y
+        }))
+      })
+    ### sigma2
+    sigma2=sapply(1:k,function(j){
+    if(p>1){
+      eta=apply((Beta)[[j]],2,function(x) approx(tgrid,x,xout=u,rule=2)$y)
+    }else{
+      eta=approx(tgrid,(Beta)[[j]],xout=u,rule=2)$y
+    }
+    sapply(1:ngrid,function(t){
+    W=lmd1[t]*zh[[t]][,j]*Kh[,t]
+     yh=rowSums(z*eta)
+     res2=c((y-yh)^2)
+    sig2=sum(W*res2)/sum(W)
+    })
+  })
+
+  ### mix proportion
+  prop=sapply(1:k,function(j){
+    sapply(1:ngrid,function(t){
+      W=lmd1[t]*zh[[t]][,j]*Kh[,t]
+      rho=sum(W)/sum(lmd1[t]*Kh[,t])
+    })
+  })
+  prop=prop/rowSums(prop)
+  ##Evaluating convergence
+  if(p>1){
+    mix.beta=lapply(1:k,function(j) apply(Beta[[j]],2,function(x) approx(tgrid,x,xout=u,rule=2)$y))
+  }else{
+    mix.beta=lapply(1:k,function(j) approx(tgrid,Beta[[j]],xout=u,rule=2)$y)
+  }
+  mix.prop=mix.sigma2=NULL
+  for(j in 1:k){
+    mix.prop=cbind(mix.prop,approx(tgrid,prop[,j],xout=u,rule=2)$y)
+    mix.sigma2=cbind(mix.sigma2,approx(tgrid,sigma2[,j],xout=u,rule=2)$y)
+  }
+  LogLik1=sum(log(rowSums(sapply(1:k,function(j) mix.prop[,j]*dnorm(y-rowSums(z*mix.beta[[j]]),0,sqrt(mix.sigma2)[,j])))))
+  diff=abs(LogLik1-LogLik0)
+  lmd0=lmd1
+  sigma20=sigma2
+  pi0=prop
+  Beta0=Beta
+  LogLik0=LogLik1
+  count=count+1
+  tol=c(tol,LogLik1)
+  if(count==1e2) diff=1e-100
+  }
+  beta1=sapply(1:k,function(j) colMeans(mix.beta[[j]]))
+  out=backfit(y,u,z,tgrid,k,beta1,mix.prop,colMeans(mix.sigma2),bw);
+  Beta1=out$Beta1;pi1=out$pi1;sigma21=out$sigma21;
+  res=order(sigma21);Beta1=Beta1[,res];pi1=pi1[,res];sigma21=sigma21[res]
+  g=sapply(1:k,function(j) pi1[,j]*dnorm(y-z%*%Beta1[,j],0,sqrt(sigma21)[j]));gn=g/rowSums(g)
+  LL1=sum(log(rowSums(g)))
+  BIC=BIC(t,cbind(1,x),bw,k,LL1)
+  mu=sapply(1:k,function(j) z%*%Beta1[,j])
+  out=list(resp=gn,mix.mu=mu,mix.prop=pi1,mix.beta=Beta1,mix.sigma2=sigma21,LL=LL1,BIC=BIC)
+  return(out)
+}
+
+
 ##A function to fit the SPGMRVPs using the Naive EM algorithm
 SPGMRVPs_Naive_EM=function(x,t,y,k,bw,tgrid,init.model){
   n=length(y)
