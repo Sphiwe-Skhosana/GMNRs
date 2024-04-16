@@ -343,7 +343,7 @@ GaussLinMix=function(x,y,x0,k,weights=NULL,model0){
 }
 
 ##A function that fits the SPGMPLMs using the profile-likelihood EM (PL-EM) algorithm
-SPGMPLMs_PL_EM=function(x,t,y,k,bw,tgrid,init.model){
+SPGMPLMs_PL_EM=function(X,t,y,k,bw,tgrid,init.model){
   n=length(y)
   z=as.matrix(x)
   ngrid=length(tgrid)
@@ -394,9 +394,9 @@ SPGMPLMs_PL_EM=function(x,t,y,k,bw,tgrid,init.model){
 }
 
 ##A function that fits the SPGMPLMs using the proposed objective-based profile-likelihood EM (OB-PL-EM) algorithm
-SPGMPLMs_OB_PL_EM=function(x,t,y,k,bw,tgrid,init.model){
+SPGMPLMs_OB_PL_EM=function(X,t,y,k,bw,tgrid,init.model){
   n=length(y)
-  z=as.matrix(x);p=ncol(z)
+  z=as.matrix(X);p=ncol(z)
   u=t
   ngrid=length(tgrid)
   ##Initial State
