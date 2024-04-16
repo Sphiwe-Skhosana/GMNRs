@@ -4,7 +4,7 @@ This folder contains all the ```R``` code used to fit non-parametric Gaussian mi
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-NPGMNRs.R):
-* The ```NPGMNRs_OB_EM(x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the model-based EM approach.
+* The ```NPGMNRs_OB_EM(x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the objective-based EM approach.
 * The ```NPGMNRs_Naive_EM (x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the naive EM algorithm without consideration to the label-switching problem.
 * The ```NPGMNRs_Effective_EM (x,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the effective EM algorithm of Huang et al. (2013).
 
@@ -28,7 +28,7 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```x``` is a vector of length $n$ that consists of the covariate values. Note that the function can only take only one covariate.
   + ```y``` is a vector of length $n$ that consists of the response variable values
   + ```k``` is an integer that specifies the number of components
-  + ```method``` is an integer that specifies the initialization method that should be used. The choices are ```1 - mixture of polynomial regressions``` and ```2 - the true NPGMNRs model (if known)```
+  + ```method``` is an integer that specifies the initialization method that should be used. The choices are ```1 - mixture of polynomial regressions model``` and ```2 - the true NPGMNRs model (if known)```
   + ```true.init.model``` is a list object that contains the true model
   + ```p``` If ```method=1``` then this parameter specifies the degree of the polynomial.    
   #### Values (output)
