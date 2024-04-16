@@ -4,7 +4,7 @@ This folder contains all the ```R``` code used to fit semi-parametric Gaussian m
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMRVPs.R):
 * The ```SPGMRVPs_MB_ECM(x,t,y,k,bw,tgrid,init.model,lmd=1e-5)``` function fits the SPGMRVPs model using the model-based ECM approach.
-* * The ```SPGMRVPs_MB_EM(x,t,y,k,bw,tgrid,init.model)``` function fits the SPGMRVPs model using the model-based EM approach.
+* The ```SPGMRVPs_MB_EM(x,t,y,k,bw,tgrid,init.model)``` function fits the SPGMRVPs model using the model-based EM approach.
 * The ```SPGMRVPs_Naive_EM (x,t,y,k,bw,tgrid,init.model)``` function fits the SPGMRVPs model using the naive EM algorithm without consideration to the label-switching problem.
 * The ```HME(y,x,t,k)``` function fits the Mixture-of-Experts model via the parametric EM algorithm using the ```hmeEM``` function in the ```R``` package ```mixtools``` (. The LEM algorithm makes use of the effective EM algorithm to account for the label-switching problem.
 
