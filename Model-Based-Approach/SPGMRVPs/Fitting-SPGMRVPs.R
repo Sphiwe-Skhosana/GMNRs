@@ -253,7 +253,7 @@ GMLR=function(y,z,mix.beta,mix.prop,mix.sigma){
 }
 
 ##A function to fit the SPGMRVPs using the model-based approach via the ECM algorithm
-SPGMRVPs_MB_ECM=function(x,t,y,k,bw,tgrid,init.model,lmd_0=NULL){
+SPGMRVPs_MB_ECM=function(x,t,y,k,bw,tgrid,init.model,lmd_0=1e-5){
   n=length(y)
   x=as.matrix(x)
   z=cbind(rep(1,n),x)
@@ -354,7 +354,7 @@ SPGMRVPs_MB_ECM=function(x,t,y,k,bw,tgrid,init.model,lmd_0=NULL){
   if(count==1e2) diff=1e-100
   }
   beta1=sapply(1:k,function(j) colMeans(mix.beta[[j]]))
-  out=backfit_fullyIter(y,u,z,tgrid0,k,beta1,mix.prop,colMeans(mix.sigma2),bw);
+  out=backfit(y,u,z,tgrid0,k,beta1,mix.prop,colMeans(mix.sigma2),bw);
   Beta1=out$Beta1;pi1=out$pi1;sigma21=out$sigma21;
   res=order(sigma21);Beta1=Beta1[,res];pi1=pi1[,res];sigma21=sigma21[res]
   g=sapply(1:k,function(j) pi1[,j]*dnorm(y-z%*%Beta1[,j],0,sqrt(sigma21)[j]));gn=g/rowSums(g)
