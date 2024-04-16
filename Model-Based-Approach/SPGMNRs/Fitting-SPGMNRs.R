@@ -341,7 +341,7 @@ GaussLinMix=function(x,y,k,init.model0){
 }
 
 ###A function to fit the SPGMNRs model using the MB-EM algorithm
-SPGMNRs_MB_EM=function(x,y,k,bw,d,xgrid,init.model,lmd_0=NULL){
+SPGMNRs_MB_EM=function(x,y,k,bw,d,xgrid,init.model){
   n=length(y)
   ngrid=length(xgrid)
   ##Initial state
