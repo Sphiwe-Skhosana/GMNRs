@@ -4,12 +4,13 @@ This folder contains all the ```R``` code used to fit semi-parametric Gaussian m
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMPLMs.R):
-* The ```SPGMPLMs_OB_EM(x,t,y,k,bw,xgrid,init.model)``` function fits the NPGMNRs model using the objective-based approach.
+* The ```SPGMPLMs_OB_PL_EM(X,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the objective-based approach.
 * The ```SPGMPLMs_Naive_EM (x,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the naive EM algorithm without consideration to the label-switching problem.
-* The ```SPGMPLs_PL_EM(x,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the PL_EM algorithm of Wu and Liu (2017).
+* The ```SPGMPLMs_PL_EM(x,t,y,k,bw,xgrid,init.model)``` function fits the SPGMPLMs using the PL_EM algorithm of Wu and Liu (2017).
 
   #### Arguments (inputs)
   + ```x``` is an $n\times p$ matrix of covariates, excluding the intercept.
+  + ```t``` is a vector of length $n$ that consists of the covariate values for the non-parametric function.
   + ```y``` is a vector of length $n$ that consists of the response variable values
   + ```k``` is the number of components
   + ```bw``` is the bandwidth 
@@ -28,9 +29,8 @@ In this section, we provide a brief description of the code (contained in the ``
   + ```x``` is a vector of length $n$ that consists of the covariate values. Note that the function can only take only one covariate.
   + ```y``` is a vector of length $n$ that consists of the response variable values
   + ```k``` is an integer that specifies the number of components
-  + ```method``` is an integer that specifies the initialization method that should be used. The choices are ```1 - mixture of polynomial regressions``` and ```2 - the true NPGMNRs model (if known)```
-  + ```true.init.model``` is a list object that contains the true model
-  + ```p``` If ```method=1``` then this parameter specifies the degree of the polynomial.    
+  + ```method``` is an integer that specifies the initialization method that should be used. The choices are ```1 - mixture of partial regression splines```, ```2 - mixture of linear regression model``` and ```3 - the true NPGMNRs model (if known)```
+  + ```true.init.model``` is a list object that contains the true model (if known)   
   #### Values (output)
   The ```initialize.model``` function returns a list object ```init.model0``` with the initial fitted model.
 # References
