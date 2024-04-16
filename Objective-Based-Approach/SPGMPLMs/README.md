@@ -1,6 +1,6 @@
 
 # Introduction
-This folder contains all the ```R``` code used to fit semi-parametric Gaussian mixtures of partially linear models (SPGMPLMs) uisng the proposed objective-based approach, the profile-likelihoo EM (PL-EM) approach proposed by Wu and Liu (2017) and the naive EM algorithm.
+This folder contains all the ```R``` code used to fit semi-parametric Gaussian mixtures of partially linear models (SPGMPLMs) uisng the proposed objective-based approach, the profile-likelihood EM (PL-EM) approach proposed by Wu and Liu (2017) and the naive EM algorithm.
 
 # Description of the code
 In this section, we provide a brief description of the code (contained in the ```R``` script Fitting-SPGMPLMs.R):
