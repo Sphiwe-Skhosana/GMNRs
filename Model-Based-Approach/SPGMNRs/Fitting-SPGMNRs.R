@@ -99,14 +99,10 @@ backfit=function(y,x,xgrid,d,k,mh,pi_init,sigma2_init,bw,backfit=TRUE){
       #gn=lapply(1:ngrid,function(t){g=sapply(1:k,function(j) pi1[j]*dnorm(y-mu0[t,j],0,sqrt(sigma21[j]))+1e-100);gn=g/rowSums(g)})
       g=sapply(1:k,function(j) pi1[j]*dnorm(y-mu0[,j],0,sqrt(sigma21[j]))+1e-100);gn=g/rowSums(g)
       ##local M-step
-      #mu1=t(sapply(1:ngrid,function(t){
       mu1=sapply(1:k,function(j){
-        W=gn[,j]*Kh
-        mh=colSums(W*y)/colSums(W)
-        #mh=sum(W*y)/sum(W)
-        #approx(xgrid,mh,xout=x,rule=2)$y
+        W=gn[,j]
+        local.polynomial.smoother(x,y,xgrid,bw,d,W)[,2]
       })
-      #}))
       mu=sapply(1:k,function(j) approx(xgrid,mu1[,j],x,rule=2)$y)
       ##Evaluating convergence
       LogLik1=sum(log(rowSums(sapply(1:k,function(j) pi1[j]*dnorm(y-mu[,j],0,sqrt(sigma21)[j])))))
