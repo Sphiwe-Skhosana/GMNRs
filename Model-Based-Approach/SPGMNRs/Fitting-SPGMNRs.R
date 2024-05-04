@@ -460,7 +460,7 @@ SPGMNRs_MB_ECM=function(x,y,k,bw,d,xgrid,init.model,lmd_0=1e-5){
     mu=sapply(1:k,function(j){
       sapply(1:length(grid),function(t){
         id=grid[t]
-        W=lmd1[t]*zh[[id]][,j]*Kh[,t]
+        W=lmd1[t]*zh[[id]][,j]
         mh=local.polynomial.smoother(x,y,xgrid[t],bw,d,W)[,2]
         #sum(W*y)/sum(W)
       })
