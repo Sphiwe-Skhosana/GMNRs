@@ -1,3 +1,8 @@
+##Pre-processing function
+standardizer=function(x){
+  z=(x-mean(x))/sd(x)
+  return(z)
+}
 ###Importing and Pre-processing the data
 data=read.csv("Data_Application1.csv")
 xt=data$Urbanization ###non-parametric
