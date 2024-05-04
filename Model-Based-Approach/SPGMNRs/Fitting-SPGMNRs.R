@@ -12,6 +12,16 @@ Kern<-function(x,x0,h){
   return(out)
 }
 
+##Normalizing functions
+minmaxscaler=function(x){
+  (x-min(x))/(max(x)-min(x))
+}
+
+standardizer=function(x){
+  z=(x-mean(x))/sd(x)
+  return(z)
+}
+
 ##Conditional distribution of y|x
 cond_dist=function(y,mix.mu,mix.prop,mix.sigma2){
   k=length(mix.prop)
