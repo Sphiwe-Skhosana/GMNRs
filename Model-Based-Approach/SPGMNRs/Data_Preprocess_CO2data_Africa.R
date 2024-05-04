@@ -1,3 +1,9 @@
+##Pre-processing functions
+standardizer=function(x){
+  z=(x-mean(x))/sd(x)
+  return(z)
+}
+
 ##Imprting data and pre-processing
 data=read.csv(data,paste0("CO2data-2014-Africa-new.csv"))
 x=data$GDP.per.capita;x=standardizer(x)
